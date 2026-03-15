@@ -30,11 +30,7 @@ else:
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY") or "dev-secret-key-change-in-production"
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL") or (
-<<<<<<< HEAD
-        "postgresql://postgres:501%40Bunny@localhost:5432/schemes_db"
-=======
-        "sqlite:///" + str(BASE_DIR / "instance" / "schemes.db")
->>>>>>> 2b75912e0ee3f30fc96cb1654973892719c3de21
+        "postgresql://localhost:5432/schemes_db"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
