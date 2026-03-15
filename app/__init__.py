@@ -33,6 +33,12 @@ def create_app(config_class=Config):
         return User.get_by_id_for_login(id_str)
 
     with app.app_context():
+<<<<<<< HEAD
+=======
+        if app.config["SQLALCHEMY_DATABASE_URI"].startswith("sqlite:///"):
+            instance_dir = BASE_DIR / "instance"
+            instance_dir.mkdir(exist_ok=True)
+>>>>>>> 2b75912e0ee3f30fc96cb1654973892719c3de21
         db.create_all()
         if Admin.query.filter_by(username="admin").first() is None:
             admin = Admin(username="admin")
