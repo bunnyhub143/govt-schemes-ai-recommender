@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Browse Schemes - Govt Schemes Advisor{% endblock %}
+{% block content %}
+<h1>📋 Browse Government Schemes</h1>
+<p class="subtitle">Explore schemes by category or search by keyword.</p>
+
+<!-- Search -->
+<form action="{{ url_for('main.schemes_search') }}" method="GET" class="search-bar">
+    <input type="text" name="q" placeholder="Search schemes by keyword..." value="">
+    <button type="submit" class="btn">🔍 Search</button>
+</form>
+
+<!-- View All -->
+<div style="margin-bottom:1.5rem;">
+    <a href="{{ url_for('main.schemes_all') }}" class="btn btn-outline">📄 View All Schemes</a>
+</div>
+
+<!-- Categories -->
+<div class="section-header">
+    <h2>📂 By Category</h2>
+</div>
+<div class="grid-3">
+    {% for cat_name, count in categories %}
+    <a href="{{ url_for('main.schemes_by_cat', category=cat_name) }}" class="card card-clickable" style="padding:1.25rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0;">{{ cat_name }}</h3>
+            <span class="badge badge-warning">{{ count }} schemes</span>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+
+<div class="links" style="margin-top:2rem;">
+    <a href="{{ url_for('main.dashboard') }}">← Back to Dashboard</a>
+</div>
+{% endblock %}

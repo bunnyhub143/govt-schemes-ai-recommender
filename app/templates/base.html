@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Govt Schemes Advisor{% endblock %}</title>
+    <meta name="description" content="AI-powered Government Scheme Advisor - Find the best government schemes for you">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --primary: #1e3a5f;
+            --primary-light: #2d5a8e;
+            --accent: #4facfe;
+            --accent-glow: #00f2fe;
+            --bg: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #263548;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --text-bright: #f8fafc;
+            --success: #34d399;
+            --error: #f87171;
+            --warning: #fbbf24;
+            --border: #334155;
+            --radius: 12px;
+            --shadow: 0 4px 24px rgba(0,0,0,0.3);
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary) 0%, #0f2644 100%);
+            padding: 0.75rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .navbar .brand {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--text-bright);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .navbar .brand span.emoji { font-size: 1.4rem; }
+        .nav-links { display: flex; gap: 0.25rem; align-items: center; }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 0.5rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent);
+            background: rgba(79, 172, 254, 0.1);
+        }
+
+        /* Container */
+        .container { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1.25rem; }
+        .container-narrow { max-width: 560px; margin: 0 auto; padding: 1.5rem 1.25rem; }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .card:hover { border-color: rgba(79,172,254,0.3); }
+        .card-clickable { cursor: pointer; text-decoration: none; display: block; color: inherit; }
+        .card-clickable:hover { transform: translateY(-2px); border-color: var(--accent); }
+
+        /* Typography */
+        h1 { font-size: 1.75rem; font-weight: 700; color: var(--text-bright); margin-bottom: 0.5rem; }
+        h2 { font-size: 1.25rem; font-weight: 600; color: var(--text-bright); margin-bottom: 0.75rem; }
+        h3 { font-size: 1.05rem; font-weight: 600; color: var(--text-bright); margin-bottom: 0.5rem; }
+        .subtitle { color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1.5rem; }
+
+        /* Grid */
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
+
+        /* Forms */
+        .form-group { margin-bottom: 1.15rem; }
+        label { display: block; margin-bottom: 0.35rem; font-weight: 500; color: var(--text); font-size: 0.9rem; }
+        input[type="text"], input[type="password"], input[type="email"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 0.65rem 0.85rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-bright);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(79,172,254,0.15); }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.6rem 1.25rem;
+            background: linear-gradient(135deg, var(--accent), #00c6fb);
+            color: #0f172a;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(79,172,254,0.35); }
+        .btn-block { width: 100%; justify-content: center; }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+        .btn-outline:hover { background: rgba(79,172,254,0.1); }
+        .btn-sm { padding: 0.4rem 0.85rem; font-size: 0.82rem; }
+
+        /* Alerts */
+        .alert { padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem; border: 1px solid; }
+        .alert-error { background: rgba(248,113,113,0.1); color: var(--error); border-color: rgba(248,113,113,0.2); }
+        .alert-success { background: rgba(52,211,153,0.1); color: var(--success); border-color: rgba(52,211,153,0.2); }
+        .alert-info { background: rgba(79,172,254,0.1); color: var(--accent); border-color: rgba(79,172,254,0.2); }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.72rem;
+            font-weight: 600;
+            border-radius: 20px;
+            background: rgba(79,172,254,0.15);
+            color: var(--accent);
+            margin: 0.15rem;
+        }
+        .badge-success { background: rgba(52,211,153,0.15); color: var(--success); }
+        .badge-warning { background: rgba(251,191,36,0.15); color: var(--warning); }
+
+        /* Links */
+        .links { margin-top: 1.25rem; text-align: center; font-size: 0.88rem; }
+        .links a { color: var(--accent); text-decoration: none; }
+        .links a:hover { text-decoration: underline; }
+
+        /* Search bar */
+        .search-bar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .search-bar input { flex: 1; }
+
+        /* Scheme card */
+        .scheme-card { padding: 1.25rem; }
+        .scheme-card h3 { margin-bottom: 0.35rem; font-size: 0.98rem; line-height: 1.4; }
+        .scheme-card .desc { color: var(--text-muted); font-size: 0.84rem; line-height: 1.5; margin-bottom: 0.75rem;
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .scheme-card .meta { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; }
+
+        /* Profile stat */
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+        .stat-item { text-align: center; padding: 1rem; background: var(--bg); border-radius: 10px; border: 1px solid var(--border); }
+        .stat-item .value { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+        .stat-item .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+        /* Section header */
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .section-header h2 { margin-bottom: 0; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar { padding: 0.75rem 1rem; flex-direction: column; gap: 0.5rem; }
+            .nav-links { flex-wrap: wrap; justify-content: center; }
+            .grid-3 { grid-template-columns: 1fr; }
+            .container { padding: 1rem; }
+        }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="brand">
+            <span class="emoji">🏛️</span>
+            <span>AI Govt Schemes Advisor</span>
+        </div>
+        <div class="nav-links">
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+                {% if not current_user.get_id().startswith("admin:") %}
+                    <a href="{{ url_for('main.profile') }}">Profile</a>
+                    <a href="{{ url_for('main.schemes_browse') }}">Schemes</a>
+                    <a href="{{ url_for('main.recommend') }}">AI Advisor</a>
+                {% endif %}
+                <a href="{{ url_for('auth.logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('auth.login') }}">Login</a>
+                <a href="{{ url_for('auth.register') }}">Register</a>
+                <a href="{{ url_for('auth.admin_login') }}">Admin</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="{% block container_class %}container{% endblock %}">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, msg in messages %}
+                    <div class="alert alert-{{ category if category in ['error','success','info'] else 'info' }}">{{ msg }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
