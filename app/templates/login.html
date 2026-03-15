@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Login - Govt Schemes Advisor{% endblock %}
+{% block content %}
+<div class="card">
+    <h1>User Login</h1>
+    <p style="color:#718096; font-size:0.9rem; margin-bottom:1rem;">Enter your username. We'll send an OTP to your <strong>registered email</strong> to log in.</p>
+    <form method="post" action="{{ url_for('auth.request_otp') }}">
+        <div class="form-group">
+            <label for="username">Username *</label>
+            <input type="text" id="username" name="username" required autocomplete="username" value="{{ request.form.username or '' }}">
+        </div>
+        <button type="submit" class="btn btn-block">Send OTP to Registered Email</button>
+    </form>
+    <p class="links">New user? <a href="{{ url_for('auth.register') }}">Register</a> &nbsp;|&nbsp; <a href="{{ url_for('auth.admin_login') }}">Admin login</a> &nbsp;|&nbsp; <a href="{{ url_for('auth.test_email') }}">Not getting OTP? Test email</a></p>
+</div>
+{% endblock %}

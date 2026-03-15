@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Govt Schemes Advisor{% endblock %}
+{% block content %}
+<div class="card" style="margin-bottom:1.5rem; background: linear-gradient(135deg, #1e3a5f 0%, #0f2644 100%); border: 1px solid rgba(79,172,254,0.2);">
+    {% if current_user.get_id().startswith("admin:") %}
+        <h1>👋 Welcome, Admin</h1>
+        <p class="subtitle">Manage the Govt Schemes Advisor platform.</p>
+    {% else %}
+        <h1>👋 Welcome, {{ current_user.username }}</h1>
+        <p class="subtitle">Find the best government schemes tailored for you.</p>
+        <div class="stat-grid">
+            <div class="stat-item">
+                <div class="value">{{ current_user.age or '—' }}</div>
+                <div class="label">Age</div>
+            </div>
+            <div class="stat-item">
+                <div class="value">{{ current_user.occupation or '—' }}</div>
+                <div class="label">Occupation</div>
+            </div>
+            <div class="stat-item">
+                <div class="value">{% if current_user.income %}₹{{ current_user.income|int }}{% else %}—{% endif %}</div>
+                <div class="label">Annual Income</div>
+            </div>
+            <div class="stat-item">
+                <div class="value">{{ total_schemes }}</div>
+                <div class="label">Total Schemes</div>
+            </div>
+        </div>
+        {% if not current_user.age and not current_user.income and not current_user.occupation %}
+            <div class="alert alert-info" style="margin-top:0.5rem;">
+                💡 <a href="{{ url_for('main.profile') }}" style="color:var(--accent);">Complete your profile</a> to get personalized scheme recommendations.
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+
+{% if not current_user.get_id().startswith("admin:") %}
+<!-- Quick Actions -->
+<div class="grid-3" style="margin-bottom:1.5rem;">
+    <a href="{{ url_for('main.profile') }}" class="card card-clickable" style="text-align:center;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">👤</div>
+        <h3>My Profile</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem;">View and edit your profile details</p>
+    </a>
+    <a href="{{ url_for('main.schemes_browse') }}" class="card card-clickable" style="text-align:center;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">📋</div>
+        <h3>Browse Schemes</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem;">Explore {{ total_schemes }} schemes by category</p>
+    </a>
+    <a href="{{ url_for('main.recommend') }}" class="card card-clickable" style="text-align:center;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">🤖</div>
+        <h3>AI Advisor</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem;">Get personalized recommendations</p>
+    </a>
+</div>
+
+<!-- Top Recommendations -->
+{% if recommended %}
+<div class="section-header">
+    <h2>🎯 Recommended for You</h2>
+    <a href="{{ url_for('main.recommend') }}" class="btn btn-outline btn-sm">View All →</a>
+</div>
+<div class="grid-3" style="margin-bottom:1.5rem;">
+    {% for scheme in recommended %}
+    <div class="card scheme-card">
+        <h3>{{ scheme.name }}</h3>
+        <p class="desc">{{ scheme.description[:200] }}</p>
+        <div class="meta">
+            <span class="badge badge-success">{{ scheme.category }}</span>
+            {% if scheme.website %}
+                <a href="{{ scheme.website }}" target="_blank" rel="noopener" style="font-size:0.78rem; color:var(--accent);">🔗 Official →</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Categories Overview -->
+{% if categories %}
+<div class="section-header">
+    <h2>📂 Scheme Categories</h2>
+    <a href="{{ url_for('main.schemes_browse') }}" class="btn btn-outline btn-sm">Browse All →</a>
+</div>
+<div class="grid-3">
+    {% for cat_name, count in categories %}
+    <a href="{{ url_for('main.schemes_by_cat', category=cat_name) }}" class="card card-clickable" style="padding:1rem 1.25rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0;">{{ cat_name }}</h3>
+            <span class="badge badge-warning">{{ count }}</span>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} - Govt Schemes Advisor{% endblock %}
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1rem;">
+    <div>
+        <h1>{{ title }}</h1>
+        <p class="subtitle" style="margin-bottom:0;">{{ subtitle }}</p>
+    </div>
+    <a href="{{ url_for('main.schemes_browse') }}" class="btn btn-outline btn-sm">← Back to Browse</a>
+</div>
+
+<!-- Search -->
+{% if query is defined %}
+<form action="{{ url_for('main.schemes_search') }}" method="GET" class="search-bar">
+    <input type="text" name="q" placeholder="Search schemes..." value="{{ query or '' }}">
+    <button type="submit" class="btn">🔍 Search</button>
+</form>
+{% endif %}
+
+{% if schemes %}
+<div class="grid-2">
+    {% for scheme in schemes %}
+    <div class="card scheme-card">
+        <h3>{{ scheme.name }}</h3>
+        <p class="desc">{{ scheme.description[:300] }}</p>
+        <div class="meta">
+            <span class="badge badge-success">{{ scheme.category }}</span>
+            {% if scheme.website %}
+                <a href="{{ scheme.website }}" target="_blank" rel="noopener" style="display:inline-block; margin-top:0.5rem; font-size:0.82rem; color:var(--accent);">
+                    🔗 Official Website →
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card" style="text-align:center; padding:3rem;">
+    <div style="font-size:2.5rem; margin-bottom:1rem;">🔍</div>
+    <h2>No schemes found</h2>
+    <p class="subtitle">Try a different search or browse by category.</p>
+    <a href="{{ url_for('main.schemes_browse') }}" class="btn" style="margin-top:1rem;">Browse All Schemes</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Test Email - Govt Schemes Advisor{% endblock %}
+{% block content %}
+<div class="card">
+    <h1>Test email (OTP debug)</h1>
+    <p style="color:#718096; font-size:0.9rem; margin-bottom:1rem;">
+        Mail configured: <strong>{{ 'Yes' if mail_configured else 'No' }}</strong>
+        {% if mail_user %}(sending from: {{ mail_user }}){% endif %}
+    </p>
+    {% if not mail_configured %}
+    <p style="background:#fef3c7; padding:0.75rem; border-radius:8px; font-size:0.9rem;">
+        Create a file named <strong>.env</strong> in the project folder (same folder as run.py) with:<br>
+        <code>MAIL_USERNAME=your@gmail.com</code><br>
+        <code>MAIL_PASSWORD=your-16-char-app-password</code><br>
+        Use a Gmail <a href="https://myaccount.google.com/apppasswords" target="_blank">App Password</a>, not your normal password.
+    </p>
+    {% endif %}
+    <form method="post" action="{{ url_for('auth.test_email') }}">
+        <div class="form-group">
+            <label for="email">Send test email to</label>
+            <input type="email" id="email" name="email" required placeholder="e.g. bunny143256a@gmail.com" value="{{ request.form.email or '' }}">
+        </div>
+        <button type="submit" class="btn btn-block">Send test email</button>
+    </form>
+    {% if hint %}
+    <div style="margin-top:1rem; padding:0.75rem; background:#fed7d7; border-radius:8px; font-size:0.85rem; word-break:break-all;">
+        <strong>Error:</strong> {{ hint }}
+    </div>
+    {% endif %}
+    <p class="links" style="margin-top:1rem;"><a href="{{ url_for('auth.login') }}">Back to login</a></p>
+</div>
+{% endblock %}

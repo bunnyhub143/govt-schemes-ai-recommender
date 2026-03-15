@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}My Profile - Govt Schemes Advisor{% endblock %}
+{% block container_class %}container-narrow{% endblock %}
+{% block content %}
+<div class="card">
+    <h1>👤 My Profile</h1>
+    <p class="subtitle">Update your details for better scheme recommendations.</p>
+
+    <div class="stat-grid" style="margin-bottom:1.75rem;">
+        <div class="stat-item">
+            <div class="value" style="font-size:1.1rem; word-break:break-word;">{{ current_user.username }}</div>
+            <div class="label">Username</div>
+        </div>
+        <div class="stat-item">
+            <div class="value" style="font-size:1.1rem; word-break:break-word;">{{ current_user.email }}</div>
+            <div class="label">Email</div>
+        </div>
+    </div>
+
+    <form method="POST">
+        <div class="form-group">
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" min="1" max="120"
+                   value="{{ current_user.age or '' }}" placeholder="Enter your age">
+        </div>
+        <div class="form-group">
+            <label for="occupation">Occupation</label>
+            <input type="text" id="occupation" name="occupation"
+                   value="{{ current_user.occupation or '' }}" placeholder="e.g. Farmer, Student, Business, Worker">
+        </div>
+        <div class="form-group">
+            <label for="income">Annual Income (₹)</label>
+            <input type="number" id="income" name="income" min="0" step="1000"
+                   value="{{ current_user.income|int if current_user.income else '' }}" placeholder="e.g. 200000">
+        </div>
+        <button type="submit" class="btn btn-block">💾 Save Profile</button>
+    </form>
+
+    <div class="links">
+        <a href="{{ url_for('main.dashboard') }}">← Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}
